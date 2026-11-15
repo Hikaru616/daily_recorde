@@ -1,0 +1,55 @@
+/* Fit the whole month's 28–31 rows in the available viewport. */
+.overview-page{height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}
+.overview-page .topbar{height:38px;min-height:38px;flex-shrink:0}
+.overview-page .page-heading{padding:12px 0;min-height:54px;flex-shrink:0}
+.overview-page .page-heading h1{font-size:23px}
+.overview-page .page-heading .primary{padding:9px 14px;font-size:11px}
+.overview-page .demo-banner{padding:7px 12px;min-height:31px;flex-shrink:0;font-size:9px}
+.overview-page .demo-banner button{font-size:9px}
+.overview-page .stats{padding:12px 0 14px;gap:20px;flex-shrink:0}
+.overview-page .stat>div{margin-top:3px}
+.overview-page .stat>div>span:first-child{font-size:25px}
+.overview-page .stat-label{font-size:9px}
+.overview-page .stat-mark{font-size:20px}
+.overview-page .workspace{flex:1;min-height:0;align-items:stretch;gap:18px}
+.overview-page .landscape-panel{height:100%;min-height:0;display:flex;flex-direction:column;overflow:visible;position:relative}
+.overview-page .landscape-toolbar{padding:11px 16px 5px;flex-shrink:0;min-height:40px}
+.overview-page .month-title h2{font-size:20px}
+.overview-page .landscape-caption{padding:4px 16px 8px;font-size:9px;flex-shrink:0}
+.overview-page .log-column-head{padding:0 16px 6px;font-size:8px;flex-shrink:0;grid-template-columns:40px minmax(0,1fr) 36px;gap:8px}
+.overview-page .horizontal-month{flex:1;min-height:0;max-height:none;display:grid!important;overflow:visible;padding:2px 8px 4px;gap:0;position:relative}
+.overview-page .day-log{height:100%;min-height:0;max-height:none;padding:0 8px;grid-template-columns:40px minmax(0,1fr) 36px;gap:8px;align-items:center;border-color:#34395340;overflow:visible}
+.overview-page .log-date{min-height:0;height:100%;padding:0;align-items:center;gap:5px;line-height:1}
+.overview-page .log-date b{font-size:9px;font-weight:400}
+.overview-page .log-date small{font-size:7px}
+.overview-page .log-date i{bottom:auto;left:30px;width:3px;height:3px}
+.overview-page .log-score{font-size:8px;line-height:1;padding:0;height:100%}
+.overview-page .log-track{height:100%;min-height:0;display:flex;align-items:center;padding:0;overflow:visible;cursor:pointer}
+.overview-page .landscape-footer{padding:6px 16px;font-size:8px;min-height:24px;flex-shrink:0}
+.overview-page .landscape-footer svg{height:11px;width:11px}
+.overview-page .detail-panel{position:relative;top:auto;min-height:0;max-height:100%;height:100%;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#57476f #171b31;padding:18px 16px}
+.overview-page .detail-heading h2{font-size:16px;margin:10px 0 6px}
+.overview-page .detail-heading p{font-size:9px}
+.overview-page .page-footer{min-height:25px;padding:7px 0;flex-shrink:0;font-size:7px}
+.block-train.tower{display:flex;align-items:center;width:100%;height:100%;min-height:0}
+.block-train .strata-stack{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:0;width:100%;min-width:0;height:100%;padding:0}
+.progress-block{display:block;position:relative;flex:0 1 auto;min-width:0;max-width:100%;height:62%;max-height:13px;min-height:3px;border:0;border-radius:2px;margin:0;padding:0;transform-origin:left center;background-image:linear-gradient(180deg,#ffffff20,#ffffff00 60%,#11173425);box-shadow:inset -1px 0 0 #0f142b88,inset 0 1px 0 #ffffff22;outline-offset:2px;transition:filter .16s,box-shadow .16s}
+.progress-block:hover,.progress-block:focus-visible{filter:brightness(1.3);box-shadow:inset 0 0 0 1px #e5dbff99,0 0 9px #a9a0ee40;z-index:3}
+.progress-block.active-block{box-shadow:inset 0 0 0 1px #e5d6ffb0,0 0 9px #a99bef30}
+.empty-track{height:1px;width:100%;background:#4a4b6525;display:block}
+.detail-tower{padding:18px 0 0;background:none}
+.detail-tower .block-train.large{display:flex;min-height:0;max-height:none;height:32px;overflow:visible;padding:0;border:0;border-radius:0}
+.detail-tower .block-train.large .strata-stack{width:100%;min-width:0;flex-shrink:1}
+.block-train.large .progress-block{height:26px;max-height:26px;border-radius:4px}
+.daily-total{margin-top:12px;padding-bottom:12px}
+.block-tooltip{position:fixed;width:260px;max-width:calc(100vw - 24px);padding:12px 14px;border:1px solid #79639388;border-radius:8px;background:#24213cf5;box-shadow:0 8px 35px #0006;z-index:1000;pointer-events:none;backdrop-filter:blur(12px);color:#e7def5}
+.block-tooltip b{display:block;font-size:12px;font-weight:500;line-height:1.65;overflow-wrap:anywhere}
+.block-tooltip>span{display:flex;align-items:center;gap:7px;font-size:9px;margin-top:6px;color:#b4a2ce}
+.block-tooltip i{width:2px;height:2px;border-radius:50%;background:#79698b}
+.block-tooltip p{font-size:10px;line-height:1.7;color:#a99bb9;margin:8px 0 0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.close-detail{display:none}
+@media(max-width:1050px){.overview-page .workspace{grid-template-columns:minmax(0,1fr) 230px;gap:12px}.overview-page .stats{gap:12px}.overview-page .detail-panel{padding:16px 12px}}
+@media(max-width:800px){.overview-page .workspace{display:block;position:relative;min-height:0}.overview-page .detail-panel{display:none}.overview-page .detail-panel.detail-open{display:block;position:fixed;inset:auto 15px 15px;z-index:30;height:auto;max-height:70dvh;box-shadow:0 0 0 100vmax #03061670,0 10px 50px #0008;border-color:#8e78b5;background:linear-gradient(135deg,#25203e,#151c32)}.close-detail{display:grid;position:absolute;right:10px;top:10px;color:#bdacd8}.overview-page .landscape-caption{display:flex}.overview-page .legend{margin:0}.overview-page .detail-panel .detail-heading{padding-right:25px}.overview-page .detail-panel .entry-detail{margin-top:0}.overview-page .page-heading h1{font-size:22px}.overview-page .stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.overview-page .stat{padding-right:8px}.overview-page .stat:nth-child(2){border-right:1px solid #42446360}.overview-page .stat>div>span:first-child{font-size:23px}.overview-page .stat-mark{display:none}.overview-page .stat small{font-size:7px}}
+@media(max-width:560px){.sidebar{height:48px;padding:8px 16px}.brand{font-size:23px}.brand-icon{height:28px;width:28px}.sidebar nav button{padding:7px 8px}.sidebar nav button:first-child{font-size:9px}.overview-page{height:calc(100dvh - 48px);padding:0 14px}.overview-page .topbar{display:none}.overview-page .page-heading{min-height:47px;padding:8px 0}.overview-page .page-heading h1{font-size:20px}.overview-page .page-heading .primary{font-size:10px;padding:8px 11px}.overview-page .demo-banner{min-height:32px;flex-direction:row;align-items:center;gap:5px;padding:5px 8px;font-size:7px;line-height:1.5}.overview-page .demo-banner button{font-size:0;align-self:center}.overview-page .demo-banner button svg{width:13px}.overview-page .demo-tag{font-size:6px;padding:3px 4px}.overview-page .stats{padding:9px 0 10px;gap:8px}.overview-page .stat{padding-right:5px}.overview-page .stat-label{font-size:7px;white-space:nowrap;gap:2px}.overview-page .stat>div>span:first-child{font-size:20px}.overview-page .stat small{display:none}.overview-page .stat>div{margin-top:2px}.overview-page .stat-label button svg{width:10px;height:10px}.overview-page .landscape-toolbar{padding:9px 10px 4px;min-height:36px}.overview-page .month-title h2{font-size:17px}.overview-page .month-title h2 span{font-size:9px}.overview-page .month-buttons button{padding:2px}.overview-page .replay-button{font-size:8px;gap:3px}.overview-page .replay-button svg{width:10px}.overview-page .landscape-caption{padding:3px 10px 5px;font-size:7px;gap:4px;align-items:center}.overview-page .legend{font-size:0;gap:2px}.overview-page .legend span{display:none}.overview-page .legend i{width:8px;height:5px}.overview-page .log-column-head{grid-template-columns:28px minmax(0,1fr) 25px;gap:5px;padding:0 10px 5px;font-size:7px}.overview-page .horizontal-month{padding:2px 4px 3px}.overview-page .day-log{padding:0 6px;grid-template-columns:28px minmax(0,1fr) 25px;gap:5px}.overview-page .log-date b{font-size:8px}.overview-page .log-date small{font-size:6px}.overview-page .log-date{gap:3px}.overview-page .log-date i{left:24px;bottom:auto;width:2px;height:2px}.overview-page .log-score{font-size:7px}.overview-page .landscape-footer{min-height:19px;padding:4px 10px;font-size:6px}.overview-page .landscape-footer svg{height:9px;width:9px}.overview-page .page-footer{min-height:20px;padding:5px 0;font-size:6px;align-items:center;line-height:1}.overview-page .page-footer button{font-size:7px}.overview-page .detail-panel.detail-open{inset:auto 10px 10px;padding:20px 16px;max-height:75dvh}.overview-page .detail-heading h2{font-size:18px}.overview-page .detail-panel .entry-detail h3{font-size:13px}.overview-page .detail-panel .entry-note{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.progress-block,.block-tooltip{transition:none!important}}
+.overview-page .horizontal-month{grid-template-columns:minmax(0,1fr)}

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+*.log
+qa-mobile.html
+.openai/local*
+
+# Local credentials and hosting-specific metadata
+.env
+.env.*
+!.env.example
+.openai/
+.sites-checkout/
