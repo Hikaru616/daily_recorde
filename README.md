@@ -2,30 +2,52 @@
 
 ソースコード: https://github.com/Hikaru616/daily_recorde
 
-このリポジトリにはアプリのコードとサンプルだけを収録しています。実際の記録データは各ブラウザのIndexedDB内に保存され、GitHubには送信されません。
+このリポジトリには、Reactフロントエンド、Node.js API、MySQLを含みます。実際の記録データはMySQLへ保存され、Docker Composeでは名前付きボリュームに永続化されます。
 
-現在の公開サイト: https://strata-daily-growth.mobiledog2.chatgpt.site
+現在の公開サイト（従来の静的版）: https://strata-daily-growth.mobiledog2.chatgpt.site
 
-GitHubへのpushと現在の公開サイトの更新は別の操作です。自動デプロイは未設定です。GitHub側でコードを変更した際は、公開先にも同じ変更を反映してください。公開先固有の設定・認証情報はこのリポジトリに含めていません。
+GitHubへのpushと現在の公開サイトの更新は別の操作です。MySQL版はAPIを実行できるDocker対応サーバーへのデプロイが必要で、静的な公開サイトへフロントエンドだけを反映しても保存機能は動きません。公開先固有の設定・認証情報はこのリポジトリに含めていません。
 
 
 宇宙をテーマにした、一日一行のコンパクトな進捗ログです。
 
-## 起動
+## Dockerで起動（推奨）
 
-Node.js 22.6以上とnpmを用意し、以下を実行します。
+Docker DesktopなどのDocker実行環境を起動してから、以下を実行します。
 
 ```sh
+cp .env.example .env
+# .env のパスワードを必要に応じて変更
+docker compose up --build -d
+```
+
+`http://localhost:3000` を開きます。停止してもMySQLデータは残ります。
+
+```sh
+docker compose down
+```
+
+`docker compose down -v` はMySQLのボリュームも削除するため、記録を消したい場合以外は実行しないでください。状態確認には `docker compose ps`、ログ確認には `docker compose logs -f app` を使えます。
+
+## ローカル開発
+
+Node.js 22.6以上とnpmを用意し、MySQLだけをDockerで起動します。
+
+```sh
+cp .env.example .env
+docker compose up -d db
 npm ci
 npm run dev
 ```
+
+Viteは `http://localhost:5173`、APIは `http://localhost:3000` で起動します。Viteが `/api` をAPIサーバーへ転送します。
 
 ```sh
 npm test
 npm run build
 ```
 
-`dist/` を静的ホスティングできます。React 19 / TypeScript / Vite / Motion / Lucideを使用。
+本番用の `dist/` はAPIサーバーから配信します。MySQL APIが必須になったため、静的ファイルだけのホスティングでは保存機能は動きません。React 19 / TypeScript / Vite / Motion / Lucide / Express / MySQLを使用しています。
 
 ## 月間表示
 
@@ -44,7 +66,15 @@ npm run build
 
 編集・確認付き削除、月移動、月間サマリー、プロジェクト作成・関連記録の履歴、JSON書き出し・検証付き復元を実装。初回は閲覧専用サンプルで、自分の記録と分離しています。
 
-データは同じブラウザ・URL内のIndexedDBに保存。トランザクション完了後に画面状態を確定します。保存失敗はフォーム内にも表示します。JSONインポートは確認後の全置換です。
+データは `/api/data` を介してMySQLの `entries`、`projects`、`categories` テーブルへ保存します。全置換処理はMySQLトランザクション内で行い、成功後にだけ画面状態を確定します。JSONインポートも検証・確認後にMySQLのデータを全置換します。
+
+MySQLが空の初回アクセスでは、同じブラウザ・同じオリジンに旧IndexedDBデータがあれば自動的にMySQLへ移行します。旧公開サイトとDocker版のようにURLが異なる場合、ブラウザの保存領域にはアクセスできないため、旧サイトでJSONをエクスポートし、Docker版でインポートしてください。
+
+MySQL自体のバックアップ例:
+
+```sh
+docker compose exec db sh -c 'mysqldump -u root -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"' > strata-backup.sql
+```
 
 ## 評価と構造
 
@@ -58,7 +88,9 @@ Lv4・進捗0は3.4pt。数値や所要時間は評価に影響しません。�
 - `src/colors.ts`：カテゴリーの色相とポイントに応じた明度。
 - `src/categories.css`：カテゴリーUIと常時発光。
 - `src/model.ts`：データモデル、設定、スコア、日付、インポート検証。
-- `src/storage.ts`：非同期load/saveの保存アダプター。
+- `src/storage.ts`：MySQL APIを呼ぶ非同期load/saveアダプターと旧IndexedDB移行。
+- `server/index.js`：REST APIと本番フロントエンド配信。
+- `server/database.js`：MySQLスキーマ作成、読込、トランザクション保存。
 - `src/Tower.tsx`：共用の角丸ブロック描画、ツールチップとアニメーション。
 - `src/main.tsx`：画面、フォーム、プロジェクト、JSON操作。
 - `src/compact.css`：画面内に収める配置、ブロック、ツールチップ、モバイル詳細シート。
@@ -67,7 +99,7 @@ Lv4・進捗0は3.4pt。数値や所要時間は評価に影響しません。�
 
 ## 検証
 
-自動テスト9件：進捗ゼロでの評価、全16評価組み合わせ、サンプル往復・集計、不正JSONの拒否、空データと1000件のデータ検証、旧v1データの移行、カテゴリーJSONの検証、同じ色相でのポイントに応じた濃淡、進捗が濃さに反映されること。
+自動テスト12件：従来のモデル・色の9件に加え、MySQL API入力の正常系、参照不整合、DB列長を超えるIDの拒否を確認します。
 
 型チェック・本番ビルドを通過。前版で追加・編集・削除、再読み込み後の保持、前月への日付変更、プロジェクト紐づけ、JSON書き出し・復元をブラウザ操作で確認しています。
 
@@ -75,12 +107,12 @@ Lv4・進捗0は3.4pt。数値や所要時間は評価に影響しません。�
 
 ## 制約
 
-- クラウド同期・端末間同期・認証による記録同期は未実装。ブラウザデータ削除や端末故障に備えてJSONを保存してください。
-- プレビューと公開URLでは保存領域が別です。
+- 現在は1つのMySQLデータセットを共有する個人利用向け構成で、ユーザー認証・ユーザー別データ分離は未実装です。インターネットへ公開する場合は、リバースプロキシなどで認証とHTTPSを追加してください。
+- 接続先MySQLが異なる環境（ローカル・本番など）のデータは同期されません。
 - 一ヶ月を収めるため、小さい画面や極端に記録が多い日ではブロックも小さくなります。日別詳細のブロック選択でも確認できます。
 - 月間を収めることを優先し、日別詳細やプロジェクト履歴・フォームには必要に応じてスクロールがあります。
 - プロジェクトは作成・参照・紐づけに対応。名前の変更・削除は未実装です。
-- 初期日付は日本時間。複数タブの同時編集の競合解決は未実装です。
+- 初期日付は日本時間。保存はデータ全体の置換方式で、複数ユーザー・複数タブの同時編集に対する競合解決は未実装です。
 - 実機端末・複数ブラウザ・OS側Reduced Motion設定の網羅検証は未実施です。
 
 ## カテゴリー版の追加検証（2026年11月15日）
